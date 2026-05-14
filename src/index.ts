@@ -289,6 +289,19 @@ async function routeRequest(request: Request) {
     return noContent();
   }
 
+ // === 新增：根路径返回网页 UI ===
+  if (pathname === "/" || pathname === "") {
+    if (request.method !== "GET") {
+      return errorResponse(405, "METHOD_NOT_ALLOWED", "method not allowed");
+    }
+    return new Response(HTML_PAGE, {
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        ...CORS_HEADERS,  // 如果你想允许跨域
+      },
+    });
+  }
+
   if (pathname === "/health") {
     if (request.method !== "GET") {
       return errorResponse(405, "METHOD_NOT_ALLOWED", "method not allowed");
